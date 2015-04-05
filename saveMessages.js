@@ -8,7 +8,6 @@
 var lastRan = "2015/04/01";
 var query = "size:1m has:attachment before:" + lastRan;
 var folderId = "0B9obPdQcHruIflpjN0FKMUpsRGxiclNaSnZnX2kxc1RCSWJDN3FWS2VCM2VXeXhQSGUwM0U";
-//var cacheDuration = 3600; // 1 hour
 
 function main() {
   getBodiesOfMessages();
@@ -22,19 +21,16 @@ function getBodiesOfMessages() {
   while (i--) {
     var curMessages = threads[threadLen - i - 1].getMessages();
     var msgLen = curMessages.length;
-    var j = msgLen;
-    
-    while (j--) {
-      var msg = curMessages[msgLen - j - 1];
-      var subject = msg.getSubject();
-      var body = msg.getPlainBody();
-      saveCopy(subject, body);
-    }
+    var lastMessage = curMessages[msgLen - 1];
+    saveCopy(lastMessage);
   }
 }
 
-function saveCopy(name, content) {
+function saveCopy(message) {
   var folder = DriveApp.getFolderById(folderId);
+  var name = message.getSubject();
+  var content = message.getPlainBody();
+
   folder.createFile(name, content, MimeType.RTF);
-  Logger.log('added ' + subject + ' to messages folder');
+  Logger.log('added ' + name + ' to messages folder');
 }
