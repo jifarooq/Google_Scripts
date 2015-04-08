@@ -16,8 +16,8 @@
 
 
 // Edit these to your liking.
-var unrespondedLabel = 'Biz/Follow up',
-    ignoreLabel = 'Biz/Ignore',
+var unrespondedLabel = 'Follow up',
+    ignoreLabel = 'Ignore',
     minDays = 7,
     maxDays = 14;
 
@@ -36,7 +36,6 @@ function processUnresponded() {
   Logger.log('There are ' + threads.length + ' threads.');
 
   // Filter threads where I was the last respondent.
-  // len filter added by me
   for (var i = 0; i < threads.length; i++) {
     var thread = threads[i],
         messages = thread.getMessages(),
@@ -46,7 +45,7 @@ function processUnresponded() {
         lastTo = lastMessage.getTo(),  // I don't want to hear about it when I am sender and receiver
         lastMessageIsOld = lastMessage.getDate().getTime() < minDaysAgo.getTime();
     
-    var jointConditions = (len == 1) && isMe(lastFrom) && !isMe(lastTo) &&
+    var jointConditions = isMe(lastFrom) && !isMe(lastTo) &&
                           lastMessageIsOld && !threadHasLabel(thread, ignoreLabel);
 
     if (jointConditions) {
@@ -167,5 +166,3 @@ function pluralize(length, strItem) {
   } else {
     return message + 's';
   }
-}
-    
