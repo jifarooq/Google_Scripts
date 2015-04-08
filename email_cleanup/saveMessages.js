@@ -1,20 +1,20 @@
 /*
  This script goes through your Gmail Inbox and searches your emails with the query provided 
- (large emails with attachments). While another script downloads attachments, this one simply 
- saves the text body of email messages to a Google Drive folder.
+ (large emails with attachments). While another script downloads attachments, this one 
+ saves the text body of the last message in a thread to a Google Drive folder.
 */
 
-// change these as needed
-var lastRan = "2015/04/01";
-var query = "size:1m has:attachment before:" + lastRan;
-var folderId = "0B9obPdQcHruIflpjN0FKMUpsRGxiclNaSnZnX2kxc1RCSWJDN3FWS2VCM2VXeXhQSGUwM0U";
+// edit these as needed
+var lastRan = "2015/03/03";
+var msg_query = "size:1m has:attachment before:" + lastRan;
+var folderId = "--insert your folder id (presumably named messages) here--";
 
 function main() {
   getBodiesOfMessages();
 }
 
 function getBodiesOfMessages() {
-  var threads = GmailApp.search(query);
+  var threads = GmailApp.search(msg_query);
   var threadLen = threads.length;
   var i = threadLen;
   
@@ -31,6 +31,8 @@ function saveCopy(message) {
   var name = message.getSubject();
   var content = message.getPlainBody();
 
-  folder.createFile(name, content, MimeType.RTF);
+  var file = folder.createFile(name, content, MimeType.RTF);
+  // store message date as file description for easy organizing
+  file.setDescription(message.getDate()); 
   Logger.log('added ' + name + ' to messages folder');
 }
