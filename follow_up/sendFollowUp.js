@@ -19,8 +19,9 @@ function getEmailsWithLabel() {
 
 function fireFollowUp(threads) {
   var len = threads.length;
+  var response = populateMessageBody();
+  
   for (var i = 0; i < len; i++) {
-    var response = populateMessageBody();
     threads[i].replyAll(null, { name: "Your name", htmlBody: response });
     Logger.log('replied to thread ' + (i+1));
   }
